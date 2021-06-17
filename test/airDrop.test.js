@@ -33,6 +33,13 @@ contract("RecordAirDropDelegate", accounts => {
     } catch (e) {
       assert.ok(e.message.match(/revert/));
     }
+
+    // 200 token
+    let addrs = Array.from({length: 200}, (v,i)=>i).map(v=>accounts[6]);
+    let amounts = Array.from({length: 200}, (v,i)=>i).map(v=>(1));
+
+    await delegate.updateIncentive(1, 1, addrs, amounts, amounts, {from: accounts[5]});
+
   });
 
   it("should success when deposit", async () => {
@@ -74,13 +81,46 @@ contract("RecordAirDropDelegate", accounts => {
     balance = await web3.eth.getBalance(delegate.address);
     assert.strictEqual(balance.toString(), '0');
 
+    await web3.eth.sendTransaction({from: accounts[0], to: delegate.address, value: 10000});
     try {
-    await delegate.airDrop([accounts[6], accounts[7]], [5000, 5000], {from: accounts[3]});
+      await delegate.airDrop([accounts[6], accounts[7]], [5000, 5000], {from: accounts[3]});
       assert.fail('never go here');
     } catch (e) {
       assert.ok(e.message.match(/revert/));
     }
+
+    await web3.eth.sendTransaction({from: accounts[0], to: delegate.address, value: 200});
+    balance = await web3.eth.getBalance(delegate.address);
+    assert.strictEqual(balance.toString(), '10200');
+    let addrs = Array.from({length: 200}, (v,i)=>i).map(v=>accounts[6]);
+    let amounts = Array.from({length: 200}, (v,i)=>i).map(v=>(1));
+    await delegate.airDrop(addrs, amounts, {from: accounts[5]});
+    balance = await web3.eth.getBalance(delegate.address);
+    assert.strictEqual(balance.toString(), '10000');
+
+    await web3.eth.sendTransaction({from: accounts[0], to: delegate.address, value: 202});
+
+    try {
+      let addrs = Array.from({length: 202}, (v,i)=>i).map(v=>accounts[6]);
+      let amounts = Array.from({length: 202}, (v,i)=>i).map(v=>(1));
+      await delegate.airDrop(addrs, amounts, {from: accounts[5]});
+      assert.fail('never go here');
+    } catch (e) {
+      assert.ok(e.message.match(/revert/));
+    }
+
+    try {
+      let addrs = Array.from({length: 200}, (v,i)=>i).map(v=>accounts[6]);
+      let amounts = Array.from({length: 200}, (v,i)=>i).map(v=>(10000));
+      await delegate.airDrop(addrs, amounts, {from: accounts[5]});
+      assert.fail('never go here');
+    } catch (e) {
+      assert.ok(e.message.match(/revert/));
+    }
+
   });
+
+
 
 });
 
