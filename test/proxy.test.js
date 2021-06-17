@@ -1,9 +1,9 @@
-const Proxy = artifacts.require('Proxy');
+const CommonProxy = artifacts.require('CommonProxy');
 const RecordAirDropDelegate = artifacts.require('RecordAirDropDelegate');
 
 const assert = require('assert');
 
-contract("Proxy", accounts => {
+contract("CommonProxy", accounts => {
   let proxy;
   let delegate;
   let delegate2;
@@ -11,7 +11,7 @@ contract("Proxy", accounts => {
   beforeEach(async ()=>{
     zdelegate = await RecordAirDropDelegate.new();
     delegate2 = await RecordAirDropDelegate.new();
-    proxy = await Proxy.new(delegate.address, accounts[1], '0x');
+    proxy = await CommonProxy.new(delegate.address, accounts[1], '0x');
   });
 
   it("should success when upgrade", async () => {

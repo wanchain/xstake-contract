@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/proxy/TransparentUpgradeableProxy.sol";
 
 // ZooKeeperProxy is only used for 4 upgradeable contract:
 // Boosting, NFT, NFT factory, Marketplace
-contract Proxy is TransparentUpgradeableProxy {
+contract CommonProxy is TransparentUpgradeableProxy {
     constructor(address _logic, address admin_, bytes memory _data) 
         public 
         payable 
