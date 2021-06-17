@@ -70,7 +70,7 @@ contract("RecordAirDropDelegate", accounts => {
     }
   });
 
-  it("should success when withdraw", async () => {
+  it("should success when airDrop", async () => {
     delegate = await RecordAirDropDelegate.new();
     delegate.initialize(accounts[0], accounts[5]);
 
