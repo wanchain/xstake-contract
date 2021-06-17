@@ -38,11 +38,8 @@ contract RecordAirDropDelegate is Initializable, AccessControl, RecordAirDropSto
         require(hasRole(ROBOT_ROLE, msg.sender));
         require(users.length <= MAX_ONCE);
         uint length = users.length;
-        uint total = 0;
         for (uint i=0; i<length; i++) {
-            total = total.add(amounts[i]);
-            require(address(this).balance >= total, "Balance not enough");
-
+            require(address(this).balance >= amounts[i], "Balance not enough");
             users[i].transfer(amounts[i]);
             emit AirDrop(users[i], amounts[i]);
         }
