@@ -12,7 +12,7 @@ contract RecordAirDropDelegate is Initializable, AccessControl, RecordAirDropSto
 
     uint public constant MAX_ONCE = 200;
 
-    event RecordAirDrop(uint indexed epochId, uint indexed snapshot, address[] tokenAddress, uint[] totalStaked, uint[] totalIncentive);
+    event RecordAirDrop(uint indexed timestamp, uint indexed snapshot, address[] tokenAddress, uint[] totalStaked, uint[] totalIncentive);
 
     event AirDrop(address indexed user, uint indexed amount);
 
@@ -29,9 +29,9 @@ contract RecordAirDropDelegate is Initializable, AccessControl, RecordAirDropSto
         msg.sender.transfer(address(this).balance);
     }
 
-    function updateIncentive(uint epochId, uint snapshot, address[] memory tokenAddress, uint[] memory totalStaked, uint[] memory totalIncentive) external {
+    function updateIncentive(uint timestamp, uint snapshot, address[] memory tokenAddress, uint[] memory totalStaked, uint[] memory totalIncentive) external {
         require(hasRole(ROBOT_ROLE, msg.sender));
-        emit RecordAirDrop(epochId, snapshot, tokenAddress, totalStaked, totalIncentive);
+        emit RecordAirDrop(timestamp, snapshot, tokenAddress, totalStaked, totalIncentive);
     }
 
     function airDrop(address payable[] memory users, uint[] memory amounts) external {
