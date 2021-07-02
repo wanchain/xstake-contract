@@ -21,17 +21,17 @@ module.exports = async function (deployer) {
   let recordAirDropDelegate = await RecordAirDropDelegate.deployed();
   await deployer.deploy(CommonProxy, recordAirDropDelegate.address, proxyAdmin, '0x');
 
-  let safari = await RecordAirDropDelegate.at((await CommonProxy.deployed()).address);
+  let record = await RecordAirDropDelegate.at((await CommonProxy.deployed()).address);
   
-  await safari.initialize(deployerAddr, robot);
+  await record.initialize(deployerAddr, robot);
 
-  await safari.grantRole('0x00', admin);
+  await record.grantRole('0x00', admin);
 
   if (deployerAddr.toLowerCase() !== admin.toLowerCase()) {
     console.log('renounceRole:', deployerAddr);
-    await safari.renounceRole('0x00', deployerAddr);
+    await record.renounceRole('0x00', deployerAddr);
   }
 
-  console.log('record-air-drop:', safari.address);
+  console.log('record-air-drop:', record.address);
 
 };

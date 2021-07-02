@@ -34,13 +34,14 @@ contract RecordAirDropDelegate is Initializable, AccessControl, RecordAirDropSto
         emit RecordAirDrop(timestamp, snapshot, tokenAddress, totalStaked, totalIncentive);
     }
 
-    function airDrop(address payable[] memory users, uint[] memory amounts) external {
+    function airDrop(address payable[] memory users, uint[] memory amounts, address _depositToken) external {
         require(hasRole(ROBOT_ROLE, msg.sender));
         require(users.length <= MAX_ONCE, "too many addresses");
         uint length = users.length;
         for (uint i=0; i<length; i++) {
             require(address(this).balance >= amounts[i], "Balance not enough");
             users[i].transfer(amounts[i]);
+            userReward[_depositToken][users[i]] = userReward[_depositToken][users[i]].add(amounts[i]);
             emit AirDrop(users[i], amounts[i]);
         }
     }

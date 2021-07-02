@@ -5,6 +5,7 @@ const { web3 } = require('@openzeppelin/test-helpers/src/setup');
 const assert = require('assert');
 
 contract("RecordAirDropDelegate", accounts => {
+  const ethToken = '0x0000000000000000000000000000000000000000';
   beforeEach(async ()=>{
 
   });
@@ -77,13 +78,13 @@ contract("RecordAirDropDelegate", accounts => {
     await web3.eth.sendTransaction({from: accounts[0], to: delegate.address, value: 10000});
     let balance = await web3.eth.getBalance(delegate.address);
     assert.strictEqual(balance.toString(), '10000');
-    await delegate.airDrop([accounts[6], accounts[7]], [5000, 5000], {from: accounts[5]});
+    await delegate.airDrop([accounts[6], accounts[7]], [5000, 5000], ethToken, {from: accounts[5]});
     balance = await web3.eth.getBalance(delegate.address);
     assert.strictEqual(balance.toString(), '0');
 
     await web3.eth.sendTransaction({from: accounts[0], to: delegate.address, value: 10000});
     try {
-      await delegate.airDrop([accounts[6], accounts[7]], [5000, 5000], {from: accounts[3]});
+      await delegate.airDrop([accounts[6], accounts[7]], [5000, 5000], ethToken, {from: accounts[3]});
       assert.fail('never go here');
     } catch (e) {
       assert.ok(e.message.match(/revert/));
@@ -94,7 +95,7 @@ contract("RecordAirDropDelegate", accounts => {
     assert.strictEqual(balance.toString(), '10200');
     let addrs = Array.from({length: 200}, (v,i)=>i).map(v=>accounts[6]);
     let amounts = Array.from({length: 200}, (v,i)=>i).map(v=>(1));
-    await delegate.airDrop(addrs, amounts, {from: accounts[5]});
+    await delegate.airDrop(addrs, amounts, ethToken, {from: accounts[5]});
     balance = await web3.eth.getBalance(delegate.address);
     assert.strictEqual(balance.toString(), '10000');
 
@@ -103,7 +104,7 @@ contract("RecordAirDropDelegate", accounts => {
     try {
       let addrs = Array.from({length: 202}, (v,i)=>i).map(v=>accounts[6]);
       let amounts = Array.from({length: 202}, (v,i)=>i).map(v=>(1));
-      await delegate.airDrop(addrs, amounts, {from: accounts[5]});
+      await delegate.airDrop(addrs, amounts, ethToken, {from: accounts[5]});
       assert.fail('never go here');
     } catch (e) {
       assert.ok(e.message.match(/revert/));
@@ -112,7 +113,7 @@ contract("RecordAirDropDelegate", accounts => {
     try {
       let addrs = Array.from({length: 200}, (v,i)=>i).map(v=>accounts[6]);
       let amounts = Array.from({length: 200}, (v,i)=>i).map(v=>(10000));
-      await delegate.airDrop(addrs, amounts, {from: accounts[5]});
+      await delegate.airDrop(addrs, amounts, ethToken, {from: accounts[5]});
       assert.fail('never go here');
     } catch (e) {
       assert.ok(e.message.match(/revert/));
