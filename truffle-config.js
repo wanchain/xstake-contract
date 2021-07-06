@@ -18,14 +18,15 @@
  *
  */
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 // const infuraKey = "fj4jll3k.....";
 //
-// const fs = require('fs');
-// const mnemonic = fs.readFileSync(".secret").toString().trim();
+const fs = require('fs');
+const mnemonic = fs.readFileSync(".secret").toString().trim();
 
-const WanProvider = require('wanchain-truffle-sdk').WanProvider;
-const wanProvider = new WanProvider(process.env.PK, "https://gwan-ssl.wandevs.org:46891");
+//const WanProvider = require('wanchain-truffle-sdk').WanProvider;
+const wanProvider = new HDWalletProvider(mnemonic, "https://gwan-ssl.wandevs.org:46891");
+const hdProvider = new HDWalletProvider(mnemonic, "https://gwan-ssl.wandevs.org:46891");
 // const wanProvider = new HDWalletProvider("", "https://gwan-ssl.wandevs.org:46891");
 
 module.exports = {
@@ -110,7 +111,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.6.12",    // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.8.5",    // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       settings: {          // See the solidity docs for advice about optimization and evmVersion
        optimizer: {
