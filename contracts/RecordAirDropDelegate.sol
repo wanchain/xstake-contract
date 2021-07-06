@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.6.12;
+pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/proxy/Initializable.sol";
+import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "./RecordAirDropStorage.sol";
 
 contract RecordAirDropDelegate is Initializable, AccessControl, RecordAirDropStorage {
@@ -26,7 +26,7 @@ contract RecordAirDropDelegate is Initializable, AccessControl, RecordAirDropSto
 
     function withdraw() external {
         require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender));
-        msg.sender.transfer(address(this).balance);
+        payable(msg.sender).transfer(address(this).balance);
     }
 
     function updateIncentive(uint timestamp, uint snapshot, address[] memory tokenAddress, uint[] memory totalStaked, uint[] memory totalIncentive) external {

@@ -9,9 +9,9 @@
     "coverage": "truffle run coverage --network coverage"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^3.4.0",
+    "@openzeppelin/contracts": "^4.1.0",
     "@openzeppelin/test-helpers": "^0.5.10",
-    "@truffle/hdwallet-provider": "^1.2.3",
+    "@truffle/hdwallet-provider": "^1.4.1",
     "bignumber.js": "^9.0.1",
     "ko-sleep": "^1.0.3",
     "solidity-coverage": "^0.7.15",
