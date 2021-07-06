@@ -43,19 +43,6 @@ contract("CommonProxy", accounts => {
     }
   });
 
-  it("should success when call to delegate function", async () => {
-    const zoo = await RecordAirDropDelegate.at(proxy.address);
-    await zoo.initialize(accounts[0], accounts[5]);
-    let ret = await zoo.getRoleMember('0x00', 0);
-    assert.strictEqual(accounts[0], ret);
-    await zoo.grantRole('0x00', accounts[3]);
-    ret = await zoo.getRoleMember('0x00', 1);
-    assert.strictEqual(accounts[3], ret);
-    await zoo.renounceRole('0x00', accounts[0]);
-    ret = await zoo.getRoleMember('0x00', 0);
-    assert.strictEqual(accounts[3], ret);
-  });
-
   it("should failed when call to delegate function without access", async () => {
     try {
       const zoo = await RecordAirDropDelegate.at(proxy.address);
