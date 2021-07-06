@@ -25,8 +25,8 @@ const fs = require('fs');
 const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 //const WanProvider = require('wanchain-truffle-sdk').WanProvider;
-const wanProvider = new HDWalletProvider(mnemonic, "https://gwan-ssl.wandevs.org:46891");
-const hdProvider = new HDWalletProvider(mnemonic, "https://gwan-ssl.wandevs.org:46891");
+const wanProvider = new HDWalletProvider(mnemonic, "https://gwan-ssl.wandevs.org:46891", 0, 100);
+const hdProvider = new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/v3/eed9f47eee3d4104a990f9e45ea2c545", 0, 100);
 // const wanProvider = new HDWalletProvider("", "https://gwan-ssl.wandevs.org:46891");
 
 module.exports = {
@@ -52,11 +52,18 @@ module.exports = {
      port: 8545,            // Standard Ethereum port (default: none)
      network_id: "*",       // Any network (default: none)
     },
+
     coverage: {
-      host: "127.0.0.1",
-      port: 7545,
-      network_id: "*",
+      host: '127.0.0.1',
+      mnemonic:"skill level pulse dune pattern rival used syrup inner first balance sad",
+      from:"0xEf73Eaa714dC9a58B0990c40a01F4C0573599959",
+      admin: "0xEf73Eaa714dC9a58B0990c40a01F4C0573599959",
+      network_id: '*',
+      port: 5545,
+      gasPrice: 1000000000,
+      skipDryRun:true,
     },
+
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
@@ -87,6 +94,13 @@ module.exports = {
     testnet: {
       provider: wanProvider,
       network_id: "999",
+      skipDryRun: true,
+      gas: 1e7,
+      gasPrice: 1e9
+    },
+    rinkeby: {
+      provider: hdProvider,
+      network_id: "4",
       skipDryRun: true,
       gas: 1e7,
       gasPrice: 1e9

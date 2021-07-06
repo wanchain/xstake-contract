@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "./RecordAirDropStorage.sol";
 
 contract RecordAirDropDelegate is Initializable, AccessControl, RecordAirDropStorage {
+    using SafeMath for uint;
 
     bytes32 public constant ROBOT_ROLE = keccak256("ROBOT_ROLE");
 
