@@ -20,9 +20,9 @@ const currentGroupIdKey2 = '0x'+keccak256("MULTICOINSTAKE_RESERVED_KEY____2").to
 contract('access', async (accounts) => {
 
     let  mc,proxy
-    let network = args.network ? args.network : "development";
-    let operator = config.networks[network].from;
+    let operator = accounts[96]
     let admin = accounts[98]
+    let robot = accounts[97]
     console.log("admin,operator:", admin, operator)
     let token1,token2,token3
     const toBN = web3.utils.toBN
@@ -49,8 +49,8 @@ contract('access', async (accounts) => {
 
     it('operator access', async ()=>{
         let tx
-        tx =  mc.revokeRole(operator_role, operator, {from:operator})
-        await expectRevert(tx, "account 0xef73eaa714dc9a58b0990c40a01f4c0573599959 is missing role 0x0000000000000000000000000000000000000000000000000000000000000000")
+        tx =  mc.revokeRole(operator_role, operator, {from:robot})
+        await expectRevert(tx, "account 0x6db0e2f176d80082bc36210e4a4a67ceecd53f05 is missing role 0x0000000000000000000000000000000000000000000000000000000000000000")
         await mc.revokeRole(operator_role, operator, {from:admin})
         tx = mc.addToken(TETH,{from:operator})
         await expectRevert(tx, "not operator");
@@ -79,9 +79,9 @@ contract('access', async (accounts) => {
 contract('token', async (accounts) => {
 
     let  mc
-    let network = args.network ? args.network : "development";
+    let operator = accounts[96]
     let admin = accounts[98]
-    let operator = config.networks[network].from;
+    let robot = accounts[97]
     console.log("admin,operator:", admin, operator)
     let token1,token2,token3
     const toBN = web3.utils.toBN
@@ -163,9 +163,9 @@ contract('token', async (accounts) => {
 contract('Token list', async (accounts) => {
 
     let  mc
-    let network = args.network ? args.network : "development";
+    let operator = accounts[96]
     let admin = accounts[98]
-    let operator = config.networks[network].from;
+    let robot = accounts[97]
     let token1,token2,token3
 
 
@@ -282,9 +282,9 @@ async function checkInfo(mc, info){
 contract('staker', async (accounts) => {
 
     let  mc,oracle
-    let network = args.network ? args.network : "development";
+    let operator = accounts[96]
     let admin = accounts[98]
-    let operator = config.networks[network].from;
+    let robot = accounts[97]
     let token1,token2,token3
     //let web3 = new Web3()
     const toBN = web3.utils.toBN
@@ -419,9 +419,9 @@ contract('staker', async (accounts) => {
 contract('stakeClaim', async (accounts) => {
 
     let  mc,oracle
-    let network = args.network ? args.network : "development";
+    let operator = accounts[96]
     let admin = accounts[98]
-    let operator = config.networks[network].from;
+    let robot = accounts[97]
     let token1,token2,token3, token4
     let web4 = new Web4("http://127.0.0.1:5545")
     const toBN = web3.utils.toBN
@@ -558,9 +558,9 @@ contract('stakeClaim', async (accounts) => {
 contract('getDepositAll', async (accounts) => {
 
     let  mc,oracle
-    let network = args.network ? args.network : "development";
+    let operator = accounts[96]
     let admin = accounts[98]
-    let operator = config.networks[network].from;
+    let robot = accounts[97]
     let token1,token2,token3
     let web4 = new Web4("http://127.0.0.1:5545")
     const toBN = web3.utils.toBN
@@ -611,13 +611,13 @@ contract('getDepositAll', async (accounts) => {
 
         tx = await mc.stakeIn(TETH, 1000,{from:admin,value:1000});
         expectEvent(tx, "stakeInEvent", {tokenAddr:TETH, from:admin, value:toBN(1000)})
-        await token2.approve(mc.address, 2000)
+        await token2.approve(mc.address, 2000,{from:operator});
         tx = await mc.stakeIn(token2.address, 1000,{from:operator});
         expectEvent(tx, "stakeInEvent", {tokenAddr:token2.address, from:operator, value:toBN(1000)})
         balance = (await token2.balanceOf(operator)).toString(10)
         console.log("balance:", balance)
         assert.equal(balance, toBN(mintValue).sub(toBN(1000)).toString(10))
-        await token1.approve(mc.address, 2000)
+        await token1.approve(mc.address, 2000,{from:operator});
         await mc.stakeIn(token1.address, 1600,{from:operator});
         await token3.approve(mc.address, 2000,{from:accounts[21]})
         await mc.stakeIn(token3.address, 1600,{from:accounts[21]});

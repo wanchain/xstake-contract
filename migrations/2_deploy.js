@@ -10,13 +10,22 @@ const config = require("../truffle-config");
 
 
 module.exports = async function (deployer, network, accounts) {
-  let proxyAdmin = accounts[99];
   network = network.split("-")[0];
   global.network = network;
   if (network === 'nodeploy') return;
   if (network === 'localTest') return;
 
-  const operator = config.networks[network].from;
+
+  let deployerAddr = accounts[0];
+  console.log('deployerAddr', deployerAddr);
+  //TODO:  CONFIG----------
+  let proxyAdmin = accounts[99];
+  let admin = accounts[98];
+  let robot = accounts[97];
+  let operator = accounts[96];
+
+  //--------------------
+
 
   await deployer.deploy(FakeOracle);
   await deployer.deploy(MultiCoinStakeDelegate);
@@ -27,5 +36,5 @@ module.exports = async function (deployer, network, accounts) {
   console.log("fakeOracle address:", fakeOracle.address);
   console.log("multiCoinStakeProxy address:", multiCoinStakeProxy.address);
 
-  await multiCoinStakeProxy.initialize(accounts[98], operator, fakeOracle.address, "ETH",18, {from:operator});
+  await multiCoinStakeProxy.initialize(admin, operator, fakeOracle.address, "ETH",18, {from:deployerAddr});
 }
