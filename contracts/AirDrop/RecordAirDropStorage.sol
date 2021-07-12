@@ -8,4 +8,7 @@ contract RecordAirDropStorage {
 
     // user reward:  token => user address => total reward
     mapping(address => mapping(address => uint)) public userReward;
+
+    // tokenKey => incentive amount
+    mapping(address => uint) public dailyIncentive;
 }
