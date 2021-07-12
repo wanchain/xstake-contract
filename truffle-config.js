@@ -27,6 +27,7 @@ const mnemonic = fs.readFileSync(".secret").toString().trim();
 //const WanProvider = require('wanchain-truffle-sdk').WanProvider;
 const wanProvider = new HDWalletProvider(mnemonic, "https://gwan-ssl.wandevs.org:46891", 0, 100);
 const hdProvider = new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/v3/eed9f47eee3d4104a990f9e45ea2c545", 0, 100);
+const localProvider = new HDWalletProvider(mnemonic, "http://127.0.0.1:8545", 0, 100);
 // const wanProvider = new HDWalletProvider("", "https://gwan-ssl.wandevs.org:46891");
 
 module.exports = {
@@ -52,7 +53,11 @@ module.exports = {
      port: 8545,            // Standard Ethereum port (default: none)
      network_id: "*",       // Any network (default: none)
     },
-
+    local: {
+      provider: localProvider,
+      network_id: "3",
+      skipDryRun:true,
+    },
     coverage: {
       host: '127.0.0.1',
       mnemonic:"skill level pulse dune pattern rival used syrup inner first balance sad",

@@ -51,7 +51,6 @@ contract MultiCoinStakeDelegate is Initializable, AccessControl, MultiCoinStakeS
   function initialize(address _admin, address _operator, address _oracle, string calldata _default_symbol, uint _default_decimal) external initializer {
     _setupRole(DEFAULT_ADMIN_ROLE, _admin);
     _setupRole(OPERATOR_ROLE, _operator);
-    // TODO 　测试ｏｗｎｅｒ可以转移，　可以升级．
     oracle = _oracle;
     default_decimal = _default_decimal;
     default_symbol = _default_symbol;
@@ -77,17 +76,13 @@ contract MultiCoinStakeDelegate is Initializable, AccessControl, MultiCoinStakeS
     }
   }
 
-  // TODO the minimum value?
   function stakeIn(address tokenAddr, uint value) external payable {
-    //require(value > 0, "zero value");
     Token storage token = tokens[tokenAddr];
     require(token.enabled == true, "Token doesn't exist or disabled");
 
     if(tokenAddr == address(0)){
-      //require(value == msg.value,"value is wrong");
       value = msg.value;
     } else {
-      //require(0 == msg.value,"value is wrong");
       IEERC20(tokenAddr).safeTransferFrom(msg.sender, address(this), value);
     }
 
@@ -101,8 +96,7 @@ contract MultiCoinStakeDelegate is Initializable, AccessControl, MultiCoinStakeS
 
 
   function stakeOut(address tokenAddr) external {
-    require(tokenSet.contains(tokenAddr), "Token doesn't exist"); //TODO could we delete it for gas?
-    //require(token.symbol.length() != 0, "Token doesn't exist");
+    require(tokenSet.contains(tokenAddr), "Token doesn't exist");
     Staker storage s = stakers[tokenAddr][msg.sender];
     require(s.amount != 0,"unknown staker");
     require(s.quited == false, "staker quited");
@@ -110,10 +104,8 @@ contract MultiCoinStakeDelegate is Initializable, AccessControl, MultiCoinStakeS
     s.quitGroupId = getCurrentStoremanGroupID();
     emit stakeOutEvent(tokenAddr, msg.sender, s.quitGroupId);
   }
-  function stakeClaim(address tokenAddr) external {
-    return stakeClaim2(tokenAddr, msg.sender);
-  }
-  function stakeClaim2(address tokenAddr, address stakeAddr) public {
+
+  function stakeClaim(address tokenAddr, address stakeAddr) external {
     require(tokenSet.contains(tokenAddr), "Token doesn't exist");
     require(stakerSet[tokenAddr].contains(stakeAddr),"unknown staker");
     Staker storage s = stakers[tokenAddr][stakeAddr];
@@ -146,7 +138,6 @@ contract MultiCoinStakeDelegate is Initializable, AccessControl, MultiCoinStakeS
 
   function addToken(address tokenAddr) onlyOperator external {
     require(!tokenSet.contains(tokenAddr), "Token has existed");
-    //require(token.symbol.length() == 0, "Token has existed");
 
     Token storage token = tokens[tokenAddr];
     if(tokenAddr == address(0)){
@@ -158,20 +149,18 @@ contract MultiCoinStakeDelegate is Initializable, AccessControl, MultiCoinStakeS
     }
     token.tokenAddr = tokenAddr;
     token.enabled = true;
-    tokenSet.add(tokenAddr);  // TODO: should we check the return value?
+    tokenSet.add(tokenAddr);
     emit addTokenEvent(tokenAddr, token.symbol, token.decimal);
   }
   function disableToken(address tokenAddr) onlyOperator external{
     require(tokenSet.contains(tokenAddr), "Token doesn't exist");
     Token storage token = tokens[tokenAddr];
-    //require(token.symbol.length() != 0, "Token doesn't exist");
     token.enabled = false;
     emit disableTokenEvent(tokenAddr, token.symbol, token.decimal);
   }
   function enableToken(address tokenAddr) onlyOperator external{
     require(tokenSet.contains(tokenAddr), "Token doesn't exist");
     Token storage token = tokens[tokenAddr];
-    //require(token.symbol.length() != 0, "Token doesn't exist");
     token.enabled = true;
     emit enableTokenEvent(tokenAddr, token.symbol, token.decimal);
   }

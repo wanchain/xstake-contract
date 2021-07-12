@@ -16,19 +16,17 @@ contract MultiCoinStakeStorage {
     string    symbol;
     uint      decimal;
     bool      enabled;
-    //uint      stakerCount;
-    //uint      deposit;
   }
 
-  address oracle;
+  address public oracle;
 
   string public default_symbol;
   uint public default_decimal;
 
   EnumerableSet.AddressSet tokenSet;
-  mapping(address=>Token) public tokens;  
+  mapping(address=>Token) public tokens;  // tokenAddr=>tokenInfo
 
-  mapping(address=>EnumerableSet.AddressSet) stakerSet; 
+  mapping(address=>EnumerableSet.AddressSet) stakerSet;       // fromAddr=>addressSet
   mapping(address=>mapping(address=>Staker)) public stakers;  // tokenAddr=>from=>staker
 
 }
