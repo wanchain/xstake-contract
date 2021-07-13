@@ -24,10 +24,9 @@ const HDWalletProvider = require('@truffle/hdwallet-provider');
 const fs = require('fs');
 const mnemonic = fs.readFileSync(".secret").toString().trim();
 
-//const WanProvider = require('wanchain-truffle-sdk').WanProvider;
-const wanProvider = new HDWalletProvider(mnemonic, "https://gwan-ssl.wandevs.org:46891", 0, 100);
-const hdProvider = new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/v3/eed9f47eee3d4104a990f9e45ea2c545", 0, 100);
-const localProvider = new HDWalletProvider(mnemonic, "http://127.0.0.1:8545", 0, 100);
+// const WanProvider = require('wanchain-truffle-sdk').WanProvider;
+// const wanProvider = new HDWalletProvider(mnemonic, "https://gwan-ssl.wandevs.org:46891", 0, 100);
+// const hdProvider = new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/v3/eed9f47eee3d4104a990f9e45ea2c545", 0, 100);
 // const wanProvider = new HDWalletProvider("", "https://gwan-ssl.wandevs.org:46891");
 
 module.exports = {
@@ -54,7 +53,7 @@ module.exports = {
      network_id: "*",       // Any network (default: none)
     },
     local: {
-      provider: localProvider,
+      provider: ()=>new HDWalletProvider(mnemonic, "http://127.0.0.1:8545", 0, 100),
       network_id: "3",
       skipDryRun:true,
     },
@@ -97,21 +96,21 @@ module.exports = {
 
     
     testnet: {
-      provider: wanProvider,
+      provider: ()=>new HDWalletProvider(mnemonic, "https://gwan-ssl.wandevs.org:46891", 0, 100),
       network_id: "999",
       skipDryRun: true,
       gas: 1e7,
       gasPrice: 1e9
     },
     rinkeby: {
-      provider: hdProvider,
+      provider: ()=>new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/v3/eed9f47eee3d4104a990f9e45ea2c545", 0, 100),
       network_id: "4",
       skipDryRun: true,
       gas: 1e7,
       gasPrice: 1e9
     },
     mainnet: {
-      provider: wanProvider,
+      provider: ()=>new HDWalletProvider(mnemonic, "https://gwan-ssl.wandevs.org:46891", 0, 100),
       network_id: "888",
       skipDryRun: true,
       gas: 1e7,
