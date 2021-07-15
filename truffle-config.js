@@ -124,7 +124,14 @@ module.exports = {
     timeout: 300000000
   },
 
-  plugins: ["solidity-coverage"], 
+  plugins: [
+    "solidity-coverage",
+    "truffle-plugin-verify"
+  ], 
+
+  api_keys: {
+    etherscan: ''
+  },
 
   // Configure your compilers
   compilers: {

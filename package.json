@@ -18,6 +18,7 @@
     "optimist": "^0.6.1",
     "solidity-coverage": "^0.7.15",
     "truffle": "^5.1.65",
+    "truffle-plugin-verify": "^0.5.11",
     "wanchain-truffle-sdk": "^1.0.0",
     "web3-provider-engine": "^16.0.1"
   }
