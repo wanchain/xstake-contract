@@ -76,13 +76,15 @@ contract MultiCoinStakeDelegate is Initializable, AccessControl, MultiCoinStakeS
     }
   }
 
-  function stakeIn(address tokenAddr, uint value) external payable {
+  function stakeIn(address tokenAddr, uint _value) external payable {
+    uint value;
     Token storage token = tokens[tokenAddr];
     require(token.enabled == true, "Token doesn't exist or disabled");
 
     if(tokenAddr == address(0)){
       value = msg.value;
     } else {
+      value = _value;
       IEERC20(tokenAddr).safeTransferFrom(msg.sender, address(this), value);
     }
 

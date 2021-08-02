@@ -485,25 +485,25 @@ contract('stakeClaim', async (accounts) => {
         await mc.stakeIn(TETH, 1000,{from:other,value:1000});
         await mc.stakeIn(token3.address, 1000,{from:other});
 
-        tx = mc.stakeClaim(token4.address,  {from:operator});
+        tx = mc.stakeClaim(token4.address, operator, {from:operator});
         await expectRevert(tx, "Token doesn't exist")
 
-        tx = mc.stakeClaim(token1.address,  {from:accounts[88]});
+        tx = mc.stakeClaim(token1.address,accounts[88],  {from:accounts[88]});
         await expectRevert(tx, "unknown staker")
 
-        tx = mc.stakeClaim(token2.address,  {from:operator});
+        tx = mc.stakeClaim(token2.address, operator, {from:operator});
         await expectRevert(tx, "staker hasn't quited")
 
 
         tx = await mc.stakeOut(token2.address, {from:operator});
         expectEvent(tx, "stakeOutEvent", {tokenAddr:token2.address, from:operator, currentGroupId:"0x000000000000000000000000000000000000000000000041726965735f303036"})
 
-        tx = mc.stakeClaim(token2.address,  {from:operator});
+        tx = mc.stakeClaim(token2.address, operator, {from:operator});
         await expectRevert(tx, "group hasn't dismissed")
         await oracle.setStoremanGroupConfig("0x000000000000000000000000000000000000000000000041726965735f303036", 7, 0, 
         [1,2], 
         [0,1],"0x00","0x00",0,0)
-        tx = await mc.stakeClaim(token2.address,  {from:operator});
+        tx = await mc.stakeClaim(token2.address, operator, {from:operator});
         expectEvent(tx, "stakeClaimEvent",{tokenAddr:token2.address, from:operator,value:toBN(1000)})
 
         balance = (await token2.balanceOf(operator)).toString(10)
@@ -512,24 +512,24 @@ contract('stakeClaim', async (accounts) => {
 
 
 
-        tx = mc.stakeClaim(TETH,  {from:accounts[88]});
+        tx = mc.stakeClaim(TETH, accounts[88], {from:accounts[88]});
         await expectRevert(tx, "unknown staker")
 
-        tx = mc.stakeClaim(TETH,  {from:admin});
+        tx = mc.stakeClaim(TETH,admin, {from:admin});
         await expectRevert(tx, "staker hasn't quited")
 
         await oracle.setStoremanGroupConfig("0x000000000000000000000000000000000000000000000041726965735f303036", 5, 0, [1,2], [0,1],"0x00","0x00",0,0)
         tx = await mc.stakeOut(TETH, {from:admin});
         expectEvent(tx, "stakeOutEvent", {tokenAddr:TETH, from:admin, currentGroupId:"0x000000000000000000000000000000000000000000000041726965735f303036"})
 
-        tx = mc.stakeClaim(TETH,  {from:admin});
+        tx = mc.stakeClaim(TETH, admin, {from:admin});
         await expectRevert(tx, "group hasn't dismissed")
         await oracle.setStoremanGroupConfig("0x000000000000000000000000000000000000000000000041726965735f303036", 7, 0, 
         [1,2], 
         [0,1],"0x00","0x00",0,0)
 
         let balance1 = toBN(await   web3.eth.getBalance(admin))
-        tx = await mc.stakeClaim(TETH,  {from:admin});
+        tx = await mc.stakeClaim(TETH, admin, {from:admin});
         expectEvent(tx, "stakeClaimEvent",{tokenAddr:TETH, from:admin,value:toBN(1000)})
         console.log("tx:", tx)
         let balance2 = toBN(await   web3.eth.getBalance(admin))
@@ -543,8 +543,8 @@ contract('stakeClaim', async (accounts) => {
         await mc.stakeOut(token3.address, {from:other});
         let balance20 = toBN(await   web3.eth.getBalance(other))
         let balance30 = toBN(await   token3.balanceOf(other))
-        await mc.stakeClaim2(TETH, other, {from:operator});
-        await mc.stakeClaim2(token3.address, other, {from:operator});
+        await mc.stakeClaim(TETH, other, {from:operator});
+        await mc.stakeClaim(token3.address, other, {from:operator});
         let balance21 = toBN(await   web3.eth.getBalance(other))
         let balance31 = toBN(await   token3.balanceOf(other))
         assert.equal(balance20.add(toBN(1000)).toString(10), balance21.toString(10))
@@ -627,12 +627,12 @@ contract('getDepositAll', async (accounts) => {
         tx = await mc.stakeOut(token2.address, {from:operator});
         expectEvent(tx, "stakeOutEvent", {tokenAddr:token2.address, from:operator, currentGroupId:"0x000000000000000000000000000000000000000000000041726965735f303036"})
 
-        tx = mc.stakeClaim(token2.address, {from:operator});
+        tx = mc.stakeClaim(token2.address, operator,{from:operator});
         await expectRevert(tx, "group hasn't dismissed")
         await oracle.setStoremanGroupConfig("0x000000000000000000000000000000000000000000000041726965735f303036", 7, 0, 
         [1,2], 
         [0,1],"0x00","0x00",0,0)
-        tx = await mc.stakeClaim(token2.address, {from:operator});
+        tx = await mc.stakeClaim(token2.address,operator, {from:operator});
         expectEvent(tx, "stakeClaimEvent",{tokenAddr:token2.address, from:operator,value:toBN(1000)})
 
         balance = (await token2.balanceOf(operator)).toString(10)

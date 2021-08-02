@@ -103,11 +103,11 @@ module.exports = {
       gasPrice: 1e9
     },
     rinkeby: {
-      provider: ()=>new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/v3/eed9f47eee3d4104a990f9e45ea2c545", 0, 100),
+      provider: ()=>new HDWalletProvider(mnemonic, " http://52.13.9.234:36892", 0, 100),
       network_id: "4",
       skipDryRun: true,
       gas: 1e7,
-      gasPrice: 1e9
+      gasPrice: 9e9
     },
     mainnet: {
       provider: ()=>new HDWalletProvider(mnemonic, "https://gwan-ssl.wandevs.org:46891", 0, 100),
