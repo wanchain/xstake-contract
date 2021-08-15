@@ -15,7 +15,7 @@ contract RecordAirDropDelegate is Initializable, AccessControl, RecordAirDropSto
 
     event RecordAirDrop(uint indexed timestamp, uint indexed snapshot, address[] tokenAddress, uint[] totalStaked, uint[] totalIncentive);
 
-    event AirDrop(address indexed user, uint indexed amount);
+    event AirDrop(address indexed token, address indexed user, uint indexed amount);
 
     function initialize(address admin, address robot) public payable initializer {
         _setupRole(DEFAULT_ADMIN_ROLE, admin);
@@ -42,7 +42,7 @@ contract RecordAirDropDelegate is Initializable, AccessControl, RecordAirDropSto
             require(address(this).balance >= amounts[i], "Balance not enough");
             users[i].transfer(amounts[i]);
             userReward[_depositToken][users[i]] = userReward[_depositToken][users[i]].add(amounts[i]);
-            emit AirDrop(users[i], amounts[i]);
+            emit AirDrop(_depositToken, users[i], amounts[i]);
         }
     }
 
