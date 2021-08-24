@@ -12,10 +12,10 @@ contract("RecordAirDropDelegate", accounts => {
 
   it("should success when initialize", async () => {
     delegate = await RecordAirDropDelegate.new();
-    delegate.initialize(accounts[0], accounts[5]);
+    delegate.initialize(accounts[0], accounts[5], accounts[6]);
 
     try {
-      await delegate.initialize(accounts[0], accounts[5]);
+      await delegate.initialize(accounts[0], accounts[5], accounts[6]);
       assert.fail('never go here');
     } catch (e) {
       assert.ok(e.message.match(/revert/));
@@ -24,7 +24,7 @@ contract("RecordAirDropDelegate", accounts => {
 
   it("should success when updateIncentive", async () => {
     delegate = await RecordAirDropDelegate.new();
-    delegate.initialize(accounts[0], accounts[5]);
+    delegate.initialize(accounts[0], accounts[5], accounts[6]);
 
     await delegate.updateIncentive(1, 1, [accounts[0]], [100], [200], {from: accounts[5]});
 
@@ -45,7 +45,7 @@ contract("RecordAirDropDelegate", accounts => {
 
   it("should success when deposit", async () => {
     delegate = await RecordAirDropDelegate.new();
-    delegate.initialize(accounts[0], accounts[5]);
+    delegate.initialize(accounts[0], accounts[5], accounts[6]);
 
     await web3.eth.sendTransaction({from: accounts[0], to: delegate.address, value: 100});
 
@@ -55,7 +55,7 @@ contract("RecordAirDropDelegate", accounts => {
 
   it("should success when withdraw", async () => {
     delegate = await RecordAirDropDelegate.new();
-    delegate.initialize(accounts[0], accounts[5]);
+    delegate.initialize(accounts[0], accounts[5], accounts[6]);
 
     await web3.eth.sendTransaction({from: accounts[0], to: delegate.address, value: 100});
     await delegate.withdraw({from: accounts[0]});
@@ -73,7 +73,7 @@ contract("RecordAirDropDelegate", accounts => {
 
   it("should success when airDrop", async () => {
     delegate = await RecordAirDropDelegate.new();
-    delegate.initialize(accounts[0], accounts[5]);
+    delegate.initialize(accounts[0], accounts[5], accounts[6]);
 
     await web3.eth.sendTransaction({from: accounts[0], to: delegate.address, value: 10000});
     let balance = await web3.eth.getBalance(delegate.address);

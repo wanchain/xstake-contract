@@ -23,7 +23,7 @@ module.exports = async function (deployer) {
 
   let record = await RecordAirDropDelegate.at((await CommonProxy.deployed()).address);
   
-  await record.initialize(deployerAddr, robot);
+  await record.initialize(deployerAddr, robot, operator);
 
   await record.grantRole('0x00', admin);
 

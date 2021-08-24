@@ -10,6 +10,7 @@ contract RecordAirDropDelegate is Initializable, AccessControl, RecordAirDropSto
     using SafeMath for uint;
 
     bytes32 public constant ROBOT_ROLE = keccak256("ROBOT_ROLE");
+    bytes32 public constant OPERATOR_ROLE = keccak256("OPERATOR_ROLE");
 
     uint public constant MAX_ONCE = 200;
 
@@ -17,9 +18,10 @@ contract RecordAirDropDelegate is Initializable, AccessControl, RecordAirDropSto
 
     event AirDrop(address indexed token, address indexed user, uint indexed amount);
 
-    function initialize(address admin, address robot) public payable initializer {
+    function initialize(address admin, address robot, address operator) public payable initializer {
         _setupRole(DEFAULT_ADMIN_ROLE, admin);
         _setupRole(ROBOT_ROLE, robot);
+        _setupRole(OPERATOR_ROLE, operator);
     }
 
     receive() external payable {}
@@ -46,7 +48,7 @@ contract RecordAirDropDelegate is Initializable, AccessControl, RecordAirDropSto
         }
     }
 
-    function setDailyIncentive(address tokenKey, uint amount) external onlyRole(ROBOT_ROLE) {
+    function setDailyIncentive(address tokenKey, uint amount) external onlyRole(OPERATOR_ROLE) {
         dailyIncentive[tokenKey] = amount;
     }
 }

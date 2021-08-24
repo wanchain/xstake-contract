@@ -46,7 +46,7 @@ contract("CommonProxy", accounts => {
   it("should failed when call to delegate function without access", async () => {
     try {
       const zoo = await RecordAirDropDelegate.at(proxy.address);
-      await zoo.initialize(accounts[0], accounts[5], {from: accounts[1]});
+      await zoo.initialize(accounts[0], accounts[5], accounts[6],{from: accounts[1]});
       assert.fail('never go here');
     } catch (e) {
       assert.ok(e.message.match(/revert/));
