@@ -36,7 +36,6 @@ contract RecordAirDropDelegate is Initializable, AccessControl, RecordAirDropSto
     }
 
     function airDrop(address payable[] memory users, uint[] memory amounts, address _depositToken) external onlyRole(ROBOT_ROLE) {
-        require(hasRole(ROBOT_ROLE, msg.sender));
         require(users.length <= MAX_ONCE, "too many addresses");
         require(users.length == amounts.length, "user amount length not same");
         uint length = users.length;
